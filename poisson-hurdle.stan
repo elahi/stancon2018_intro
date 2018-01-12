@@ -30,7 +30,7 @@ model {
 }
 generated quantities {
   // Simulate from posterior predictive distribution
-  int<lower=0> y_rep[N]; // Array of count data
+  int y_rep[N]; // Array of count data
   for (n in 1:N) {
     if (bernoulli_rng(theta)) {
       y_rep[n] = 0;
@@ -38,7 +38,7 @@ generated quantities {
     else {
       int w = poisson_rng(lambda);
       while(w < 1 || w > U){
-        w = poisson_rng(lambda) // here we are waiting for w to be truncated
+        w = poisson_rng(lambda); // here we are waiting for w to be truncated
       }
       y_rep[n] = w; 
     }

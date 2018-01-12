@@ -68,8 +68,16 @@ can then identify in which ways the model is inadequate.
 
 
 ```{r, fit, results="hide", warning=FALSE, message=FALSE}
-fit <- stan("poisson-simple.stan", data = list(N = N, y = y))
+fit <- stan("poisson-simple.stan", data = list(N = N, y = y), cores = 4)
 print(fit)
+
+##' se_mean - tells me how much I will gain from running the chains longer
+##' if se_mean is bigger than sd, then the variability in the chains is greater than the posterior (might need to run chains longer)
+##' be suspicious if se_mean > sd !!!
+##' Rhat should be close to 1 (compares within chain variance to between chain variance)
+##' n_eff = effective sample size (due to autocorrelation in the chain, is smaller than the actual sample size; in this case, 4000 draws is the max)
+##' Never thin, ever!
+
 ```
 
 #### Look at posterior distribution of lambda
@@ -77,6 +85,7 @@ print(fit)
 ```{r, plot-lambda}
 color_scheme_set("brightblue") # check out ?bayesplot::color_scheme_set
 lambda_draws <- as.matrix(fit, pars = "lambda")
+lambda_draws
 mcmc_areas(lambda_draws, prob = 0.8) # color 80% interval
 ```
 
@@ -104,6 +113,8 @@ dim(y_rep)
 
 #### Compare histogram of `y` to histograms of several `y_rep`s
 
+See 'stanfit objects' vignette for information on how to get desired info from objects.  
+
 ```{r ppc-hist, message=FALSE}
 ppc_hist(y, y_rep[1:8, ], binwidth = 1)
 ```
@@ -125,6 +136,8 @@ ppc_stat(y, y_rep, stat = "prop_zero")
 ```
 
 #### Some other checks
+
+Google 'bayesplot vignettes' to get all of the deets. 
 
 Looking at two statistics in a scatterplot:
 

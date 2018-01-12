@@ -1,7 +1,7 @@
 /* Skeleton of Stan program 
- * for Poisson "hurdle" model (also with upper truncation)
+ * for simple Poisson model
+ * Order of blocks matters
  */
- 
 data {
   int<lower=1> N; // Number of observations
   int<lower=0> y[N]; // Array of count data
